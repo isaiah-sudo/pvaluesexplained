@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P Values Explained</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            text-align: center;
+        }
+        .content {
+            max-width: 800px;
+            margin: auto;
+            text-align: left;
+        }
+        .misconceptions, .scenario, .explanation {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+        }
+        .scenario {
+            background-color: #e8f4f8;
+        }
+        .explanation {
+            background-color: #f4e8f8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Understanding P-Values</h1>
+    </header>
+    <main>
+        <div class="content">
+            <p>The p-value is a measure of how compatible your data is with the null hypothesis. The null hypothesis is the opposite of the prediction made. It does NOT represent the probability that the null hypothesis is true or false.</p>
+            
+            <div class="scenario">
+                <h2>Scenario: Testing a New Drug</h2>
+                <p>Imagine a nursery company is testing a new drug to enhance plant growth. The null hypothesis (H₀) is that the drug has no effect, and the alternative hypothesis (H₁) is that the drug increases growth.</p>
+                <p>In a 5-day trial, 50 plants are randomly assigned to either the drug group or the placebo group. After the trial, the average extra plant growth in height for the drug group is 25mm. The p-value is calculated to be <strong>0.001</strong>.</p>
+            </div>
+
+            <div class="explanation">
+                <h2>Key Points Explained</h2>
+                <ul>
+                    <li><strong>What has a probability of p?</strong><br>
+                        The p-value (0.001) represents the probability of observing an increase in plant growth as extreme as 25mm (or more extreme) if the null hypothesis (no effect) were true.</li>
+                    <li><strong>Why does a low p-value indicate the null hypothesis is likely false?</strong><br>
+                        A low p-value (e.g., 0.001) suggests that the observed data is highly unlikely under the null hypothesis. This provides strong evidence to reject the null hypothesis in favor of the alternative hypothesis.</li>
+                    <li><strong>What is statistical significance, and why is p = 0.05 used as the cutoff?</strong><br>
+                        Statistical significance means the results are unlikely to have occurred by chance. The threshold of p = 0.05 is conventionally used because it balances the risk of false positives (Type I errors) and false negatives (Type II errors).</li>
+                    <li><strong>Why is p not the probability that the null hypothesis is true?</strong><br>
+                        The p-value does not measure the probability that the null hypothesis is true. It only measures the probability of the observed data under the assumption that the null hypothesis is true.</li>
+                    <li><strong>Why must statistical significance be determined for hypothesized outcomes?</strong><br>
+                        Statistical significance applies only to outcomes that were hypothesized before the study. Post hoc analyses can lead to false positives due to multiple comparisons.</li>
+                    <li><strong>How do extraneous variables affect p?</strong><br>
+                        Extraneous variables introduce noise, making it harder to detect true effects. This can increase the p-value, leading to a failure to reject the null hypothesis even when the alternative hypothesis is true.</li>
+                    <li><strong>How do confounding variables affect p?</strong><br>
+                        Confounding variables can create false associations, leading to a low p-value even when the null hypothesis is true. This undermines the validity of the conclusion.</li>
+                    <li><strong>The problem of statistical significance without internal validity:</strong><br>
+                        Achieving statistical significance without controlling for confounding variables means the results may not reflect a true causal relationship.</li>
+                    <li><strong>The problem of statistical significance without practical significance:</strong><br>
+                        A result can be statistically significant but have no meaningful impact in the real world. For example, a drug that increases plant growth by 0.1mm may achieve p < 0.05 but is not practically useful.</li>
+                </ul>
+            </div>
+
+            <h2>Interactive Demonstration</h2>
+            <p>Try changing the sample size and growth difference to see how the p-value changes:</p>
+
+            <label for="sample-size">Sample Size:</label>
+            <input type="range" id="sample-size" min="10" max="100" value="50" oninput="updateValue('sample-size', this.value)">
+            <span id="sample-size-value">50</span> <br><br>
+
+            <label for="growth-difference">Growth Difference (mm):</label>
+            <input type="range" id="growth-difference" min="10" max="50" step="5" value="25" oninput="updateValue('growth-difference', this.value)">
+            <span id="growth-difference-value">25</span> <br><br>
+
+            <button onclick="calculatePValue()">Calculate P-Value</button>
+
+            <h3>Estimated P-Value: <span id="result">N/A</span></h3>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Isaiah and Riley</p>
+    </footer>
+    <script>
+        function updateValue(id, value) {
+            document.getElementById(`${id}-value`).innerText = value;
+        }
+
+        function calculatePValue() {
+            // Get user inputs
+            let sampleSize = parseFloat(document.getElementById("sample-size").value);
+            let growthDifference = parseFloat(document.getElementById("growth-difference").value);
+
+            // Fixed standard deviation for plant growth
+            let standardDeviation = 10;
+
+            // Calculate standard error
+            let standardError = standardDeviation / Math.sqrt(sampleSize);
+
+            // Calculate z-score
+            let zScore = growthDifference / standardError;
+
+            // Calculate p-value (two-tailed test)
+            let pValue = 2 * (1 - normalCDF(Math.abs(zScore)));
+
+            // Limit p-value to 4 decimal places
+            pValue = Math.min(1, pValue.toFixed(4));
+
+            // Display the result
+            document.getElementById("result").innerText = pValue;
+        }
+
+        // Function to calculate the cumulative distribution function (CDF) for a standard normal distribution
+        function normalCDF(z) {
+            return (1.0 + Math.erf(z / Math.sqrt(2))) / 2.0;
+        }
+    </script>
+</body>
+</html>
