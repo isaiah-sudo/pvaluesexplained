@@ -27,6 +27,10 @@
         .explanation {
             background-color: #f4e8f8;
         }
+        .slider-label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -35,12 +39,13 @@
     </header>
     <main>
         <div class="content">
-            <p>The p-value is a measure of how compatible your data is with the null hypothesis. The null hypothesis is the opposite of the prediction made. It does NOT represent the probability that the null hypothesis is true or false.</p>
+            <p>The <span title="The p-value is the probability of observing data as extreme as the observed data under the null hypothesis.">p-value</span> is a measure of how compatible your data is with the null hypothesis. The null hypothesis is the opposite of the prediction made. It does NOT represent the probability that the null hypothesis is true or false.</p>
             
             <div class="scenario">
-                <h2>Scenario: Testing a New Drug</h2>
-                <p>Imagine a nursery company is testing a new drug to enhance plant growth. The null hypothesis (H₀) is that the drug has no effect, and the alternative hypothesis (H₁) is that the drug increases growth.</p>
-                <p>In a 5-day trial, 50 plants are randomly assigned to either the drug group or the placebo group. After the trial, the average extra plant growth in height for the drug group is 25mm. The p-value is calculated to be <strong>0.001</strong>.</p>
+                <h2>Scenario: Testing a New Fertilizer</h2>
+                <p>Imagine a nursery company is testing a new fertilizer to enhance plant growth. The null hypothesis (H₀) is that the fertilizer has no effect, and the alternative hypothesis (H₁) is that the fertilizer increases growth.</p>
+                <p>In a 25-day trial, 50 plants are randomly assigned to either the fertilizer group or the placebo group. After the trial, the average plant height for the fertilizer group is 125mm. The average height for the placebo group was 100mm. The standard deviation is 20mm. The p-value is calculated to be <strong>0.001</strong>.</p>
+                <p><em>The p-value is calculated using the z-score and the cumulative distribution function (CDF) for a standard normal distribution.</em></p>
             </div>
 
             <div class="explanation">
@@ -49,37 +54,37 @@
                     <li><strong>What has a probability of p?</strong><br>
                         The p-value (0.001) represents the probability of observing an increase in plant growth as extreme as 25mm (or more extreme) if the null hypothesis (no effect) were true.</li>
                     <li><strong>Why does a low p-value indicate the null hypothesis is likely false?</strong><br>
-                        A low p-value (e.g., 0.001) suggests that the observed data is highly unlikely under the null hypothesis. This provides strong evidence to reject the null hypothesis in favor of the alternative hypothesis.</li>
+                        A low p-value (e.g., 0.001) suggests that the observed data is highly unlikely under the null hypothesis, meaning the test results were most likely not due to a coincidence and the fertilizer was effective. This provides strong evidence to reject the null hypothesis in favor of the alternative hypothesis.</li>
                     <li><strong>What is statistical significance, and why is p = 0.05 used as the cutoff?</strong><br>
-                        Statistical significance means the results are unlikely to have occurred by chance. The threshold of p = 0.05 is conventionally used because it balances the risk of false positives (Type I errors) and false negatives (Type II errors).</li>
+                        Statistical significance means the results are unlikely to have occurred by chance. p = 0.05 is typically used as a cutoff because it balances the risk of false positives (Type I errors) and false negatives (Type II errors).</li>
                     <li><strong>Why is p not the probability that the null hypothesis is true?</strong><br>
-                        The p-value does not measure the probability that the null hypothesis is true. It only measures the probability of the observed data under the assumption that the null hypothesis is true.</li>
+                        The p-value does not measure the probability that the null hypothesis is true because</li>
                     <li><strong>Why must statistical significance be determined for hypothesized outcomes?</strong><br>
-                        Statistical significance applies only to outcomes that were hypothesized before the study. Post hoc analyses can lead to false positives due to multiple comparisons.</li>
+                        Statistical significance applies only to outcomes that were hypothesized before the study. Post hypothesis analyses can lead to false positives due to .</li>
                     <li><strong>How do extraneous variables affect p?</strong><br>
                         Extraneous variables introduce noise, making it harder to detect true effects. This can increase the p-value, leading to a failure to reject the null hypothesis even when the alternative hypothesis is true.</li>
                     <li><strong>How do confounding variables affect p?</strong><br>
-                        Confounding variables can create false associations, leading to a low p-value even when the null hypothesis is true. This undermines the validity of the conclusion.</li>
+                        Confounding variables, such as soil quality in the plant growth example, can create false associations. For instance, if the fertilizer group had better soil, the observed growth might not be due to the fertilizer.</li>
                     <li><strong>The problem of statistical significance without internal validity:</strong><br>
                         Achieving statistical significance without controlling for confounding variables means the results may not reflect a true causal relationship.</li>
                     <li><strong>The problem of statistical significance without practical significance:</strong><br>
-                        A result can be statistically significant but have no meaningful impact in the real world. For example, a drug that increases plant growth by 0.1mm may achieve p < 0.05 but is not practically useful.</li>
+                        A result can be statistically significant but have no meaningful impact in the real world. For example, a fertilizer that increases plant growth by 0.1mm may achieve p < 0.05 but is not practically useful.</li>
                 </ul>
+                <p>For example, a fertilizer that increases plant growth by 0.1mm may achieve p < 0.05 but is not practically useful for farmers.</p>
             </div>
 
             <h2>Interactive Demonstration</h2>
             <p>Try changing the sample size and growth difference to see how the p-value changes:</p>
 
-            <label for="sample-size">Sample Size:</label>
-            <input type="range" id="sample-size" min="10" max="100" value="50" oninput="updateValue('sample-size', this.value)">
-            <span id="sample-size-value">50</span> <br><br>
+            <label class="slider-label" for="sample-size">Sample Size: <span id="sample-size-value">50</span></label>
+            <input id="sample-size" type="range" min="1" max="100" value="50" oninput="updateValue('sample-size', this.value)">
+            <br><br>
 
-            <label for="growth-difference">Growth Difference (mm):</label>
-            <input type="range" id="growth-difference" min="10" max="50" step="5" value="25" oninput="updateValue('growth-difference', this.value)">
-            <span id="growth-difference-value">25</span> <br><br>
+            <label class="slider-label" for="growth-difference">Growth Difference (mm): <span id="growth-difference-value">12.5</span></label>
+            <input id="growth-difference" type="range" min="0.1" max="3" step="0.1" value="1.5" oninput="updateValue('growth-difference', this.value)">
+            <br><br>
 
             <button onclick="calculatePValue()">Calculate P-Value</button>
-
             <h3>Estimated P-Value: <span id="result">N/A</span></h3>
         </div>
     </main>
@@ -88,13 +93,22 @@
     </footer>
     <script>
         function updateValue(id, value) {
-            document.getElementById(`${id}-value`).innerText = value;
+            let element = document.getElementById(`${id}-value`);
+            if (element) {
+                element.innerText = value;
+            }
         }
 
         function calculatePValue() {
             // Get user inputs
             let sampleSize = parseFloat(document.getElementById("sample-size").value);
             let growthDifference = parseFloat(document.getElementById("growth-difference").value);
+
+            // Validate sample size
+            if (sampleSize <= 0) {
+                alert("Sample size must be greater than 0.");
+                return;
+            }
 
             // Fixed standard deviation for plant growth
             let standardDeviation = 10;
@@ -108,17 +122,20 @@
             // Calculate p-value (two-tailed test)
             let pValue = 2 * (1 - normalCDF(Math.abs(zScore)));
 
-            // Limit p-value to 4 decimal places
-            pValue = Math.min(1, pValue.toFixed(4));
+            // Limit p-value to 4 decimal places and ensure it's treated as a number
+            pValue = Math.min(1, parseFloat(pValue.toFixed(4)));
 
             // Display the result
             document.getElementById("result").innerText = pValue;
         }
 
-        // Function to calculate the cumulative distribution function (CDF) for a standard normal distribution
         function normalCDF(z) {
-            return (1.0 + Math.erf(z / Math.sqrt(2))) / 2.0;
+            let t = 1 / (1 + 0.3275911 * Math.abs(z));
+            let a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741, a4 = -1.453152027, a5 = 1.061405429;
+            let erfApprox = 1 - (a1 * t + a2 * Math.pow(t, 2) + a3 * Math.pow(t, 3) + a4 * Math.pow(t, 4) + a5 * Math.pow(t, 5)) * Math.exp(-Math.pow(z, 2));
+            return (1 + Math.sign(z) * erfApprox) / 2;
         }
     </script>
 </body>
 </html>
+
